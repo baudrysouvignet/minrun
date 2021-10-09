@@ -13,7 +13,7 @@ pygame.init()
 WIDTH = 800
 HEIGHT = 300
 window = pygame.display.set_mode((WIDTH, HEIGHT), 0, 32)
-pygame.display.set_caption('Balade en ville')
+pygame.display.set_caption('MinRun')
 CIEL = (135,206,235)
 avancer = 0
 
@@ -28,6 +28,11 @@ def image():
     else:
         image= random.choice(sol_images)
     return image
+
+def maison_choix():
+    maison_type = ["maison1","maison2"]
+    maison_type = random.choice(maison_type)
+    return maison_type
 imageh = pygame.image.load('src/image/Nature/Herbe.jpg') 
 
 
@@ -44,8 +49,11 @@ for i in range (4):
             sol_block.append(i+54)
             sol_block[i+52] = sol(800,h,i,image())
     h = h+33
-print(sol_block[25].x)
-maison1 = maison(620,0)
+    
+maison_info = []
+for i in range(6):
+    maison_info.append(i)
+    maison_info[i] = maison(800-(180*i),110,maison_choix())
 continuer=1
 while continuer:
     window.fill(CIEL)
@@ -58,8 +66,8 @@ while continuer:
         sol_block[i+26].afficher_block(window)
         sol_block[i+52].afficher_block(window)
     
-    maison1.construction("maison1",window)
-
+    for i in range(len(maison_info)):
+        maison_info[i].construction(window)
 
 
     for event in pygame.event.get():
@@ -72,6 +80,9 @@ while continuer:
             if event.key == K_RIGHT:
                 bouger=0
     if bouger == 1:
+        for i in range(len(maison_info)):
+            maison_info[i].x = maison_info[i].x-(vel-1)
+            maison_info[i].respawn_maison(maison_choix())
         for i in range(78):
             sol_block[i].x = int(sol_block[i].x)-vel
             if sol_block[i].y==200:
