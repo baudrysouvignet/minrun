@@ -45,7 +45,7 @@ for i in range (4):
             sol_block[i+52] = sol(800,h,i,image())
     h = h+33
 print(sol_block[25].x)
-maison1 = maison(20,20)
+maison1 = maison(620,0)
 continuer=1
 while continuer:
     window.fill(CIEL)
