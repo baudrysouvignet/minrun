@@ -4,11 +4,16 @@ import os
 import random
 from solobjet import *
 from maisonobjet import *
+from persoobjet import *
+
 
 
 def affichage_rue():
     pygame.draw.rect(window, (192,192,192),(0, 200, WIDTH, HEIGHT//2),0)
 pygame.init()
+
+# sonic = personnage()
+
 
 WIDTH = 800
 HEIGHT = 300
@@ -114,11 +119,11 @@ for i in range(6):
     
 continuer=1
 while continuer:
-    window.fill(CIEL)
-    affichage_rue()
     for event in pygame.event.get():
         if event.type==QUIT: 
             continuer=0
+    window.fill(CIEL)
+    affichage_rue()
     for i in range (26):
         sol_block[i].afficher_block(window)
         sol_block[i+26].afficher_block(window)
@@ -133,10 +138,19 @@ while continuer:
             if event.key == K_RIGHT:
                 bouger=1
             if event.key == K_UP:
-                sauter=1/"b"
+                sauter=1
         if event.type == KEYUP:
             if event.key == K_RIGHT:
                 bouger=0
+            if event.key == K_UP:
+                sauter=0
+    # if bouger==1 and sauter==1:
+    #     personnage.saute_sonic(sonic,window,50)
+    # if bouger==1 and sauter==0:
+    #     personnage.bouge_personnage(sonic,window)
+    # if bouger==0 and sauter==0:
+    #     personnage.affichage_personnage(sonic,window,0,400,170,"rien")
+    #     personnage.saute_sonic(sonic,window,50)
     if bouger == 1:
         for i in range(len(maison_info)):
             maison_info[i].x = maison_info[i].x-(vel-1)
@@ -148,6 +162,5 @@ while continuer:
                 sol_block[i].respawn_block(imageh)
             else:
                 sol_block[i].respawn_block(image())
+    
     pygame.display.flip()
-
-
