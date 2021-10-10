@@ -18,7 +18,7 @@ CIEL = (135,206,235)
 avancer = 0
 
 bouger=0
-vel = 5
+vel = 8
 
 h=200
 sol_images = [pygame.image.load('src/image/Minerais/Andesite_blanc.jpg') ,pygame.image.load('src/image/Minerais/Andesite.jpg') ,pygame.image.load('src/image/Minerais/Fer.jpg') ,pygame.image.load('src/image/Minerais/Or.jpg') ,pygame.image.load('src/image/Minerais/Stone.jpg') ,pygame.image.load('src/image/Minerais/Stone.jpg') ,pygame.image.load('src/image/Minerais/Stone.jpg') ,pygame.image.load('src/image/Minerais/Stone.jpg') ,pygame.image.load('src/image/Minerais/Stone.jpg') ]
@@ -28,13 +28,68 @@ def image():
     else:
         image= random.choice(sol_images)
     return image
-
+i=0
+m = ""
+maison_type = ""
 def maison_choix():
-    maison_type = ["maison1","maison2"]
-    maison_type = random.choice(maison_type)
+    global m, maison_type
+    while m == maison_type:
+        maison_type = ["maison1","maison2","maison3","maison4"]
+        maison_type = random.choice(maison_type)
+    m = maison_type
     return maison_type
 imageh = pygame.image.load('src/image/Nature/Herbe.jpg') 
 
+
+materiaux_choix = {}
+# Block aleatoirs
+def materiaux():
+    bois = ["chene","bouleau","chene_sombre"]
+    bois = random.choice(bois)
+    if bois == "chene":
+        materiaux_choix["Bois_tronc"] = "Tronc_chene"
+        materiaux_choix["Bois_planche"] = "Planche_chene"
+        materiaux_choix["Porte_1"] = "Porte_1_chene"
+        materiaux_choix["Porte_2"] = "Porte_2_chene"
+        materiaux_choix["Bois_barriere"] = "Barriere_droite_chene"
+    elif bois == "bouleau":
+        materiaux_choix["Bois_tronc"] = "Tronc_bouleau"
+        materiaux_choix["Bois_planche"] = "Planche_bouleau"
+        materiaux_choix["Porte_1"] = "Porte_1_bouleau"
+        materiaux_choix["Porte_2"] = "Porte_2_bouleau"
+        materiaux_choix["Bois_barriere"] = "Barriere_droite_chene"
+    else:
+        materiaux_choix["Bois_tronc"] = "Tronc_chene_sombre"
+        materiaux_choix["Bois_planche"] = "Planche_chene_sombre"
+        materiaux_choix["Porte_1"] = "Porte_1_chene_sombre"
+        materiaux_choix["Porte_2"] = "Porte_2_chene_sombre"
+        materiaux_choix["Bois_barriere"] = "Barriere_droite_chene"
+    
+    betton = ["noir","orange","blanc"]
+    betton = random.choice(betton)
+    if betton == "noir":
+        materiaux_choix["Beton"] = "Beton_noir"
+    elif betton == "orange":
+        materiaux_choix["Beton"] = "Beton_orange"
+    else:
+        materiaux_choix["Beton"] = "Beton_blanc"
+    
+    plante = ["lila","pivoine","rose"]
+    plante = random.choice(plante)
+    if plante == "lila":
+        materiaux_choix["Plante_1"] = "Lila_1"
+        materiaux_choix["Plante_2"] = "Lila_2"
+    elif plante == "pivoine":
+        materiaux_choix["Plante_1"] = "Pivoine_1"
+        materiaux_choix["Plante_2"] = "Pivoine_2"
+    else:
+        materiaux_choix["Plante_1"] = "Rose_1"
+        materiaux_choix["Plante_2"] = "Rose_2"
+    
+    return materiaux_choix
+materiaux()
+
+    
 
 sol_block =[]
 for i in range (4):
@@ -51,9 +106,12 @@ for i in range (4):
     h = h+33
     
 maison_info = []
+maison_sauvegarde = ""
 for i in range(6):
     maison_info.append(i)
-    maison_info[i] = maison(800-(180*i),110,maison_choix())
+    maison_info[i] = maison(800-(180*i),110,maison_choix(),materiaux())
+    materiaux_choix = {}
+    
 continuer=1
 while continuer:
     window.fill(CIEL)
@@ -82,7 +140,8 @@ while continuer:
     if bouger == 1:
         for i in range(len(maison_info)):
             maison_info[i].x = maison_info[i].x-(vel-1)
-            maison_info[i].respawn_maison(maison_choix())
+            if maison_info[i].x <= -180:
+                maison_info[i].respawn_maison(maison_choix())
         for i in range(78):
             sol_block[i].x = int(sol_block[i].x)-vel
             if sol_block[i].y==200:
