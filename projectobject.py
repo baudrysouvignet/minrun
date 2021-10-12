@@ -12,7 +12,6 @@ def affichage_rue():
     pygame.draw.rect(window, (192,192,192),(0, 200, WIDTH, HEIGHT//2),0)
 pygame.init()
 
-# sonic = personnage()
 
 
 WIDTH = 800
@@ -21,12 +20,14 @@ window = pygame.display.set_mode((WIDTH, HEIGHT), 0, 32)
 pygame.display.set_caption('MinRun')
 CIEL = (135,206,235)
 avancer = 0
-
+sauter = 0
 bouger=0
 vel = 8
 
 h=200
 sol_images = [pygame.image.load('src/image/Minerais/Andesite_blanc.jpg') ,pygame.image.load('src/image/Minerais/Andesite.jpg') ,pygame.image.load('src/image/Minerais/Fer.jpg') ,pygame.image.load('src/image/Minerais/Or.jpg') ,pygame.image.load('src/image/Minerais/Stone.jpg') ,pygame.image.load('src/image/Minerais/Stone.jpg') ,pygame.image.load('src/image/Minerais/Stone.jpg') ,pygame.image.load('src/image/Minerais/Stone.jpg') ,pygame.image.load('src/image/Minerais/Stone.jpg') ]
+
+sonic = personnage()
 def image():
     if h == 200:
         image = pygame.image.load('src/image/Nature/Herbe.jpg') 
@@ -39,7 +40,7 @@ maison_type = ""
 def maison_choix():
     global m, maison_type
     while m == maison_type:
-        maison_type = ["maison1","maison2","maison3","maison4"]
+        maison_type = ["maison1","maison2","maison3","maison4","maison5","maison6"]
         maison_type = random.choice(maison_type)
     m = maison_type
     return maison_type
@@ -48,9 +49,18 @@ imageh = pygame.image.load('src/image/Nature/Herbe.jpg')
 
 materiaux_choix = {}
 # Block aleatoirs
+boiss = ""
+bois = "c"
+bettonn =""
+betton = "b"
+plantee = ""
+plante ="p"
 def materiaux():
-    bois = ["chene","bouleau","chene_sombre"]
-    bois = random.choice(bois)
+    global boiss, bois, bettonn, betton, plantee, plante
+    while boiss ==  bois:
+        bois = ["chene","bouleau","chene_sombre"]
+        bois = random.choice(bois)
+    boiss = bois
     if bois == "chene":
         materiaux_choix["Bois_tronc"] = "Tronc_chene"
         materiaux_choix["Bois_planche"] = "Planche_chene"
@@ -70,8 +80,10 @@ def materiaux():
         materiaux_choix["Porte_2"] = "Porte_2_chene_sombre"
         materiaux_choix["Bois_barriere"] = "Barriere_droite_chene"
     
-    betton = ["noir","orange","blanc"]
-    betton = random.choice(betton)
+    while bettonn == betton:
+        betton = ["noir","orange","blanc"]
+        betton = random.choice(betton)
+    bettonn = betton
     if betton == "noir":
         materiaux_choix["Beton"] = "Beton_noir"
     elif betton == "orange":
@@ -79,8 +91,10 @@ def materiaux():
     else:
         materiaux_choix["Beton"] = "Beton_blanc"
     
-    plante = ["lila","pivoine","rose"]
-    plante = random.choice(plante)
+    while plantee == plante:
+        plante = ["lila","pivoine","rose"]
+        plante = random.choice(plante)
+    plantee = plante
     if plante == "lila":
         materiaux_choix["Plante_1"] = "Lila_1"
         materiaux_choix["Plante_2"] = "Lila_2"
@@ -92,7 +106,6 @@ def materiaux():
         materiaux_choix["Plante_2"] = "Rose_2"
     
     return materiaux_choix
-materiaux()
 
     
 
@@ -117,11 +130,13 @@ for i in range(6):
     maison_info[i] = maison(800-(180*i),110,maison_choix(),materiaux())
     materiaux_choix = {}
     
-continuer=1
-while continuer:
+running = True
+while running:
     for event in pygame.event.get():
-        if event.type==QUIT: 
-            continuer=0
+        if event.type == pygame.QUIT:
+            running = False
+
+
     window.fill(CIEL)
     affichage_rue()
     for i in range (26):
@@ -137,6 +152,8 @@ while continuer:
         if event.type == KEYDOWN:
             if event.key == K_RIGHT:
                 bouger=1
+            if event.key == K_LEFT:
+                running = False
             if event.key == K_UP:
                 sauter=1
         if event.type == KEYUP:
@@ -144,13 +161,14 @@ while continuer:
                 bouger=0
             if event.key == K_UP:
                 sauter=0
-    # if bouger==1 and sauter==1:
-    #     personnage.saute_sonic(sonic,window,50)
-    # if bouger==1 and sauter==0:
-    #     personnage.bouge_personnage(sonic,window)
-    # if bouger==0 and sauter==0:
-    #     personnage.affichage_personnage(sonic,window,0,400,170,"rien")
-    #     personnage.saute_sonic(sonic,window,50)
+    if bouger==1 and sauter==1:
+        personnage.saute_sonic(sonic,window,50)
+    if bouger==0 and sauter==1:
+        personnage.saute_sonic(sonic,window,50)
+    if bouger==1 and sauter==0:
+        personnage.bouge_personnage(sonic,window)
+    if bouger==0 and sauter==0:
+        personnage.affichage_personnage(sonic,window,0,400,90,"rien")
     if bouger == 1:
         for i in range(len(maison_info)):
             maison_info[i].x = maison_info[i].x-(vel-1)

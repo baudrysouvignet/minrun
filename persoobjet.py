@@ -8,7 +8,6 @@ class personnage:
         self.image=[]
         for x in range(0,9*104, 104):
             self.image.append(perso.subsurface(x,0,104,114))
-
         self.index=0
         self.image_boule=[]
         for x in range(0,8*104, 104):
@@ -24,19 +23,17 @@ class personnage:
 
     def bouge_personnage(self,fenetre):
         self.index = self.index +1
-        if self.index == len(self.image):
+        if self.index == (len(self.image))-1:
             self.index=3
 
-        self.affichage_personnage(fenetre,self.index,400,170,"courrir")
+        self.affichage_personnage(fenetre,self.index,400,90,"courrir")
 
 
     def saute_sonic(self,fenetre,y):
-        self.index = self.index +1
-        if self.index == len(self.image_boule):
+        if self.index == (len(self.image_boule))-1:
             self.index=0
+        else:
+            self.index = self.index +1
 
         self.affichage_personnage(fenetre,self.index,400,y,"sauter")
-
-    def arret_personnage(self,fenetre):
-        self.index=0
     
