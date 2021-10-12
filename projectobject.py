@@ -124,7 +124,6 @@ for i in range (4):
     h = h+33
     
 maison_info = []
-maison_sauvegarde = ""
 for i in range(6):
     maison_info.append(i)
     maison_info[i] = maison(800-(180*i),110,maison_choix(),materiaux())
@@ -146,7 +145,6 @@ while running:
     
     for i in range(len(maison_info)):
         maison_info[i].construction(window)
-
 
     for event in pygame.event.get():
         if event.type == KEYDOWN:
