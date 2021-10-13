@@ -129,13 +129,29 @@ for i in range(6):
     maison_info[i] = maison(800-(180*i),110,maison_choix(),materiaux())
     materiaux_choix = {}
     
+distence = 0
+distencevaleur = 0
+arial = pygame.font.SysFont("Arial", 15, bold=True, italic=False)
+fontgg = pygame.font.SysFont("Arial", 100, bold=True, italic=False)
 running = True
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
 
-
+    scorepoint = "Distence: "+str(distence)+"m"
+    score = arial.render(str(scorepoint),False,(0,0,0))
+    if distencevaleur == 100:
+        if vel <= 31:
+            vel = vel + 3
+            distencevaleur = distencevaleur-100
+            multiplica = multiplica+1
+            
+        else:
+            distencevaleur = distencevaleur-100
+    if distence >= 1000 and distence <= 1030:
+        gg = fontgg.render(str("1000"),False,(255,215,0))
+        window.blit(gg,(230,80))
     window.fill(CIEL)
     affichage_rue()
     for i in range (26):
@@ -168,6 +184,8 @@ while running:
     if bouger==0 and sauter==0:
         personnage.affichage_personnage(sonic,window,0,400,90,"rien")
     if bouger == 1:
+        distence = round((distence+0.3),1)
+        distencevaleur = distencevaleur+0.3
         for i in range(len(maison_info)):
             maison_info[i].x = maison_info[i].x-(vel-1)
             if maison_info[i].x <= -180:
@@ -178,5 +196,5 @@ while running:
                 sol_block[i].respawn_block(imageh)
             else:
                 sol_block[i].respawn_block(image())
-    
+    window.blit(score,(10,10))
     pygame.display.flip()
